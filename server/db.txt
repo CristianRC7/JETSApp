@@ -1,0 +1,28 @@
+create database jetsappdb;
+
+-- Tabla para usuarios
+CREATE TABLE public.usuarios
+(
+    id bigserial NOT NULL,
+    usuario character varying(90) NOT NULL,
+    contrasena character varying(90) NOT NULL,
+    nombre_completo character varying(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE IF EXISTS public.usuarios
+    OWNER to postgres;
+
+-- Tabla para eventos
+CREATE TABLE public.eventos
+(
+    id SERIAL PRIMARY KEY, 
+    hora TIME NOT NULL, 
+    descripcion TEXT NOT NULL, 
+    aula VARCHAR(255) NOT NULL, 
+    expositor VARCHAR(255) NOT NULL, 
+    fecha DATE NOT NULL 
+);
+
+ALTER TABLE IF EXISTS public.eventos
+    OWNER TO postgres;

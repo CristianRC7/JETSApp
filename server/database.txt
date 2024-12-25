@@ -1,0 +1,72 @@
+create database jetsappdb;
+
+
+-- Tabla de usuarios
+create table usuarios(
+	id int PRIMARY KEY AUTO_INCREMENT,
+    usuario varchar(90) not null,
+    contrasena varchar(90) not null,
+    nombre_completo varchar(255) not null
+);
+
+
+-- Tabla de eventos
+create table eventos(
+    id int PRIMARY KEY AUTO_INCREMENT,
+    hora time not null,
+    descripcion text not null,
+    aula varchar(255) not null,
+    expositor varchar(255) not null,
+    fecha date not null
+);
+
+-- Tabla de inscripciones a eventos
+CREATE TABLE inscripciones (
+	id_inscripcion INT PRIMARY KEY AUTO_INCREMENT,
+	id_datos INT,
+	id_evento INT,
+	FOREIGN KEY (id_datos) REFERENCES datos(id),
+	FOREIGN KEY (id_evento) REFERENCES eventos(id)
+);
+
+
+-- Tabla de gestiones
+
+CREATE TABLE gestion (
+    id_gestion INT PRIMARY KEY AUTO_INCREMENT,
+    gestion varchar(20) NOT NULL
+);
+
+-- Tabla de habilitación de participacion para los certificados
+CREATE TABLE participacion (
+    id_participacion INT PRIMARY KEY AUTO_INCREMENT,
+    id_datos INT,
+    id_gestion INT,
+    nro_certificado VARCHAR(255) not null,
+    FOREIGN KEY (id_datos) REFERENCES datos(id),
+    FOREIGN KEY (id_gestion) REFERENCES gestion(id_gestion)
+);
+
+-- Tabla de habilitación de calificaciones de las encuestas
+CREATE TABLE habilitacion_calificacion (
+	id_evento INT PRIMARY KEY,
+	fecha_habilitada DATE NOT NULL,
+	FOREIGN KEY (id_evento) REFERENCES eventos(id)
+);
+
+-- Tabla de calificaciones de las encuestas
+CREATE TABLE calificaciones (
+	id_calificacion INT PRIMARY KEY AUTO_INCREMENT,
+	id_datos INT,
+	id_evento INT,
+	calificacion TINYINT CHECK (calificacion BETWEEN 1 AND 5),
+	FOREIGN KEY (id_datos) REFERENCES datos(id),
+	FOREIGN KEY (id_evento) REFERENCES eventos(id)
+);
+
+-- Tabla de usuarios admin
+CREATE TABLE admin (
+    id_admin INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    id_usuario INT not null,
+    FOREIGN KEY (id_usuario) REFERENCES datos(id)
+);
