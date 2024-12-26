@@ -1,20 +1,26 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import { Calendar, Users, MapPin, FileText, Globe, Headset } from 'lucide-react-native';
 
 const Home = ({ navigation }) => {
   const cards = [
     { title: 'Eventos', icon: Calendar, route: 'Events' },
-    { title: 'Conferencistas', icon: Users },
-    { title: 'Puntos de inscripción', icon: MapPin },
+    { title: 'Conferencistas', icon: Users, route: 'Exhibitors' },
+    { title: 'Puntos de inscripción', icon: MapPin, route: 'Inscription' },
     { title: 'Formulario de eventos', icon: FileText },
-    { title: 'Visitar Página Web', icon: Globe },
+    { 
+      title: 'Visitar Página Web', 
+      icon: Globe, 
+      action: () => Linking.openURL('http://www.utepsa.edu/jets/') 
+    },
     { title: 'Soporte', icon: Headset, route: 'Support' },
   ];
 
   const handleCardPress = (card) => {
     if (card.route) {
       navigation.navigate(card.route);
+    } else if (card.action) {
+      card.action();
     } else {
       console.log(`Navegando a ${card.title}`);
     }
@@ -44,7 +50,6 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#555555',
   },
   cardsContainer: {
     padding: 16,

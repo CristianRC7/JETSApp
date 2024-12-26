@@ -3,11 +3,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+//Splash Screen
 import SplashScreen from './SplashScreen';
+//Screens
 import Login from './src/screens/Login';
 import Events from './src/screens/Events';
 import Support from './src/screens/Support';
+import Exhibitors from './src/screens/Exhibitors';
+import Inscription from './src/screens/Inscription';
+//Components
 import DrawerNavigation from './src/components/DrawerNavigation';
 
 const Stack = createStackNavigator();
@@ -54,11 +58,47 @@ export default function App() {
             component={Events} 
             options={{
               headerShown: true,
-              headerTitle: '',
+              headerTitle: 'Eventos',
               headerStyle: {
                 backgroundColor: '#cf152d',
               },
               headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: '900',
+                fontSize: 18,
+              },
+            }}
+          />
+          <Stack.Screen 
+            name="Exhibitors" 
+            component={Exhibitors} 
+            options={{
+              headerShown: true,
+              headerTitle: 'Conferencistas',
+              headerStyle: {
+                backgroundColor: '#cf152d',
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: '900',
+                fontSize: 18,
+              },
+            }}
+          />
+          <Stack.Screen 
+            name="Inscription" 
+            component={Inscription} 
+            options={{
+              headerShown: true,
+              headerTitle: 'Puntos de Inscripción',
+              headerStyle: {
+                backgroundColor: '#cf152d',
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: '900',
+                fontSize: 18,
+              },
             }}
           />
           <Stack.Screen 
@@ -66,13 +106,18 @@ export default function App() {
             component={Support} 
             options={{
               headerShown: true,
-              headerTitle: '',
+              headerTitle: 'Soporte',
               headerStyle: {
                 backgroundColor: '#cf152d',
               },
               headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: '900',
+                fontSize: 18,
+              },
             }}
           />
+          
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
