@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import { MapPin, Clock, School, Monitor } from 'lucide-react-native';
+import { MapPin, Clock, School, Monitor, NotebookPen } from 'lucide-react-native';
 
 const LocationCard = ({ title, location, schedule, icon: Icon }) => (
   <View style={styles.card}>
@@ -44,7 +44,7 @@ const Inscription = () => {
           title="Servicio de Atención Estudiantil"
           location="Planta baja del bloque Este"
           schedule="08:00 AM - 19:00 PM"
-          icon={MapPin}
+          icon={NotebookPen}
         />
 
         <LocationCard

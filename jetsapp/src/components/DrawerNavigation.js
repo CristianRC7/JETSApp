@@ -39,10 +39,10 @@ const DrawerNavigation = () => {
       />
       <Drawer.Screen 
         name="Mi Qr" 
-        component={QrSection} 
+        component={QrSection}
         options={{
           drawerIcon: ({ color }) => <QrCodeIcon color={color} />,
-        }} 
+        }}
       />
       <Drawer.Screen 
         name="Perfil" 
