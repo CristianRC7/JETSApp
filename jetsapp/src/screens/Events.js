@@ -3,12 +3,13 @@ import { View, StyleSheet, FlatList, Text, ScrollView, Linking, RefreshControl }
 import { getApiUrl, API_CONFIG } from '../config/Config';
 import DateFilterButton from '../components/DateFilterButton';
 import EventCard from '../components/EventCard';
+import EventCardSkeleton from '../components/EventCardSkeleton';
 
 const Events = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [selectedDate, setSelectedDate] = useState('2024-06-22');
+  const [selectedDate, setSelectedDate] = useState('2024-06-22'); 
 
   const dates = [
     { label: 'Día 1', date: '2024-06-22' },
@@ -66,11 +67,14 @@ const Events = () => {
   if (loading) {
     return (
       <View style={styles.container}>
-        <Text>Cargando eventos...</Text>
+        <View style={styles.eventsContainer}>
+          {[...Array(4)].map((_, index) => (
+            <EventCardSkeleton key={index} />
+          ))}
+        </View>
       </View>
     );
   }
-
   return (
     <View style={styles.container}>
       <View style={styles.filterContainer}>
