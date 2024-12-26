@@ -11,14 +11,55 @@ import {
   Keyboard,
   ScrollView,
   Alert,
+  ActivityIndicator, 
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Eye, EyeOff } from 'lucide-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Login = () => {
+import { getApiUrl, API_CONFIG } from '../config/Config';
+
+const Login = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); 
+
+  const handleLogin = async () => {
+    if (!username || !password) {
+      Alert.alert('Error', 'Por favor completa todos los campos.');
+      return;
+    }
+
+    setLoading(true); 
+    try {
+      const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.LOGIN), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          usuario: username,
+          contrasena: password,
+        }),
+      });
+
+      const data = await response.json();
+      console.log('Respuesta del servidor:', data);
+
+      if (data.status === 'success') {
+        await AsyncStorage.setItem('userData', JSON.stringify(data));
+        navigation.replace('DrawerNavigation');
+      } else {
+        Alert.alert('Error', data.message);
+      }
+    } catch (error) {
+      console.error('Error de conexión:', error);
+      Alert.alert('Error', 'Error al conectar con el servidor');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -66,8 +107,16 @@ const Login = () => {
                 </TouchableWithoutFeedback>
               </View>
 
-              <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Iniciar sesión</Text>
+              <TouchableOpacity
+                style={[styles.button, loading && styles.buttonDisabled]}
+                onPress={handleLogin}
+                disabled={loading} 
+              >
+                {loading ? (
+                  <ActivityIndicator size="small" color="#fff" /> 
+                ) : (
+                  <Text style={styles.buttonText}>Iniciar sesión</Text>
+                )}
               </TouchableOpacity>
 
               <TouchableOpacity 
@@ -139,6 +188,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 16,
+  },
+  buttonDisabled: {
+    backgroundColor: '#d6d6d6', 
   },
   buttonText: {
     color: '#fff',
