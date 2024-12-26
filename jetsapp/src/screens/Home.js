@@ -36,7 +36,7 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#555555',
   },
   cardsContainer: {
     padding: 16,
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     marginTop: 12,
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '600',
     textAlign: 'center',
     color: '#333',
