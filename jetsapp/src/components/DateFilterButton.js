@@ -16,11 +16,10 @@ const DateFilterButton = ({ label, isActive, onPress }) => {
 
 const styles = StyleSheet.create({
   filterButton: {
-    paddingHorizontal: 18,
-    paddingVertical: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     borderRadius: 25,
     backgroundColor: '#ffffff',
-    marginRight: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -31,6 +30,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     borderWidth: 1,
     borderColor: '#e0e0e0',
+    minWidth: 100,
   },
   activeFilterButton: {
     backgroundColor: '#cf152d',

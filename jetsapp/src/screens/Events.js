@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Text, ScrollView, Linking, RefreshControl } from 'react-native';
+import { View, StyleSheet, FlatList, Text, Linking, RefreshControl } from 'react-native';
 import { getApiUrl, API_CONFIG } from '../config/Config';
 import DateFilterButton from '../components/DateFilterButton';
 import EventCard from '../components/EventCard';
@@ -78,25 +78,37 @@ const Events = () => {
   return (
     <View style={styles.container}>
       <View style={styles.filterContainer}>
-        <ScrollView 
-          horizontal 
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.buttonScrollContainer}
-        >
-          <DateFilterButton
-            label="Cronograma"
-            onPress={handleSchedulePress}
-            isActive={false}
-          />
-          {dates.map((item) => (
+        <View style={styles.buttonGrid}>
+          <View style={styles.buttonRow}>
             <DateFilterButton
-              key={item.date}
-              label={item.label}
-              isActive={selectedDate === item.date}
-              onPress={() => setSelectedDate(item.date)}
+              label="Cronograma"
+              onPress={handleSchedulePress}
+              isActive={false}
             />
-          ))}
-        </ScrollView>
+          </View>
+          
+          <View style={styles.buttonRow}>
+            {dates.slice(0, 3).map((item) => (
+              <DateFilterButton
+                key={item.date}
+                label={item.label}
+                isActive={selectedDate === item.date}
+                onPress={() => setSelectedDate(item.date)}
+              />
+            ))}
+          </View>
+          
+          <View style={styles.buttonRow}>
+            {dates.slice(3, 6).map((item) => (
+              <DateFilterButton
+                key={item.date}
+                label={item.label}
+                isActive={selectedDate === item.date}
+                onPress={() => setSelectedDate(item.date)}
+              />
+            ))}
+          </View>
+        </View>
       </View>
 
       <FlatList
@@ -123,9 +135,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
-  buttonScrollContainer: {
+  buttonGrid: {
     paddingHorizontal: 16,
     gap: 8,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 8,
+    marginBottom: 8,
   },
   eventsContainer: {
     padding: 16,

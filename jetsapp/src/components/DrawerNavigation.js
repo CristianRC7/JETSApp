@@ -2,6 +2,8 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Home from '../screens/Home';
 import Profile from '../screens/Profile';
+import QrSection from '../screens/QrSection'
+import { HomeIcon, UserIcon, QrCodeIcon } from 'lucide-react-native';
 
 const Drawer = createDrawerNavigator();
 
@@ -23,10 +25,32 @@ const DrawerNavigation = () => {
         drawerActiveTintColor: '#fff',
         drawerInactiveTintColor: '#fff',
         headerTitle: '', 
+        drawerItemStyle: {
+          marginVertical: 5,
+        },
       }}
     >
-      <Drawer.Screen name="Inicio" component={Home} />
-      <Drawer.Screen name="Perfil" component={Profile} />
+      <Drawer.Screen 
+        name="Inicio" 
+        component={Home} 
+        options={{
+          drawerIcon: ({ color }) => <HomeIcon color={color} />,
+        }} 
+      />
+      <Drawer.Screen 
+        name="Mi Qr" 
+        component={QrSection} 
+        options={{
+          drawerIcon: ({ color }) => <QrCodeIcon color={color} />,
+        }} 
+      />
+      <Drawer.Screen 
+        name="Perfil" 
+        component={Profile} 
+        options={{
+          drawerIcon: ({ color }) => <UserIcon color={color} />,
+        }} 
+      />
     </Drawer.Navigator>
   );
 };
