@@ -8,9 +8,9 @@ import SplashScreen from './SplashScreen';
 //Screens
 import Login from './src/screens/Login';
 import Events from './src/screens/Events';
-import Support from './src/screens/Support';
 import Exhibitors from './src/screens/Exhibitors';
 import Inscription from './src/screens/Inscription';
+import Support from './src/screens/Support';
 //Components
 import DrawerNavigation from './src/components/DrawerNavigation';
 
