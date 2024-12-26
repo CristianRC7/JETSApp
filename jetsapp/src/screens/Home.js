@@ -4,13 +4,21 @@ import { Calendar, Users, MapPin, FileText, Globe, Headset } from 'lucide-react-
 
 const Home = ({ navigation }) => {
   const cards = [
-    { title: 'Eventos', icon: Calendar },
+    { title: 'Eventos', icon: Calendar, route: 'Events' },
     { title: 'Conferencistas', icon: Users },
     { title: 'Puntos de inscripción', icon: MapPin },
     { title: 'Formulario de eventos', icon: FileText },
     { title: 'Visitar Página Web', icon: Globe },
-    { title: 'Soporte', icon: Headset },
+    { title: 'Soporte', icon: Headset, route: 'Support' },
   ];
+
+  const handleCardPress = (card) => {
+    if (card.route) {
+      navigation.navigate(card.route);
+    } else {
+      console.log(`Navegando a ${card.title}`);
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -21,7 +29,7 @@ const Home = ({ navigation }) => {
             <TouchableOpacity
               key={index}
               style={styles.card}
-              onPress={() => console.log(`Navegando a ${card.title}`)}
+              onPress={() => handleCardPress(card)}
             >
               <Icon size={32} color="#cf152d" />
               <Text style={styles.cardTitle}>{card.title}</Text>

@@ -14,7 +14,7 @@ create table eventos(
     id int PRIMARY KEY AUTO_INCREMENT,
     hora time not null,
     descripcion text not null,
-    aula varchar(255) not null,
+    lugar varchar(255) not null,
     expositor varchar(255) not null,
     fecha date not null
 );

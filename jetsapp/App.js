@@ -6,6 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import SplashScreen from './SplashScreen';
 import Login from './src/screens/Login';
+import Events from './src/screens/Events';
+import Support from './src/screens/Support';
 import DrawerNavigation from './src/components/DrawerNavigation';
 
 const Stack = createStackNavigator();
@@ -40,10 +42,37 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator 
           initialRouteName={initialRoute}
-          screenOptions={{ headerShown: false }}
+          screenOptions={{ 
+            headerShown: false,
+            headerTitle: '' 
+          }}
         >
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="DrawerNavigation" component={DrawerNavigation} />
+          <Stack.Screen 
+            name="Events" 
+            component={Events} 
+            options={{
+              headerShown: true,
+              headerTitle: '',
+              headerStyle: {
+                backgroundColor: '#cf152d',
+              },
+              headerTintColor: '#fff',
+            }}
+          />
+          <Stack.Screen 
+            name="Support" 
+            component={Support} 
+            options={{
+              headerShown: true,
+              headerTitle: '',
+              headerStyle: {
+                backgroundColor: '#cf152d',
+              },
+              headerTintColor: '#fff',
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

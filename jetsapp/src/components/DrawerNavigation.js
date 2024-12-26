@@ -22,7 +22,7 @@ const DrawerNavigation = () => {
         },
         drawerActiveTintColor: '#fff',
         drawerInactiveTintColor: '#fff',
-        headerTitle: '',
+        headerTitle: '', 
       }}
     >
       <Drawer.Screen name="Inicio" component={Home} />
