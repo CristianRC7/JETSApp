@@ -10,9 +10,11 @@ import Login from './src/screens/Login';
 import Events from './src/screens/Events';
 import Exhibitors from './src/screens/Exhibitors';
 import Inscription from './src/screens/Inscription';
+import Form from './src/screens/Form';
 import Support from './src/screens/Support';
 //Components
 import DrawerNavigation from './src/components/DrawerNavigation';
+import Survey from './src/components/Survey';
 
 const Stack = createStackNavigator();
 
@@ -101,6 +103,22 @@ export default function App() {
               },
             }}
           />
+            <Stack.Screen 
+            name="Form" 
+            component={Form} 
+            options={{
+              headerShown: true,
+              headerTitle: 'Formularios',
+              headerStyle: {
+                backgroundColor: '#cf152d',
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: '900',
+                fontSize: 18,
+              },
+            }}
+          />
           <Stack.Screen 
             name="Support" 
             component={Support} 
@@ -117,7 +135,22 @@ export default function App() {
               },
             }}
           />
-          
+          <Stack.Screen 
+            name="Survey" 
+            component={Survey}
+            options={{
+              headerShown: true,
+              headerTitle: 'Calificar Evento',
+              headerStyle: {
+                backgroundColor: '#cf152d',
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: '900',
+                fontSize: 18,
+              },
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

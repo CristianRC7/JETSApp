@@ -7,7 +7,7 @@ const Home = ({ navigation }) => {
     { title: 'Eventos', icon: Calendar, route: 'Events' },
     { title: 'Conferencistas', icon: Users, route: 'Exhibitors' },
     { title: 'Puntos de inscripción', icon: MapPin, route: 'Inscription' },
-    { title: 'Formulario de eventos', icon: FileText },
+    { title: 'Formulario de eventos', icon: FileText, route: 'Form' },
     { 
       title: 'Visitar Página Web', 
       icon: Globe, 
