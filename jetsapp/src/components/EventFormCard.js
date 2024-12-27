@@ -10,13 +10,23 @@ const EventFormCard = ({ event, onSurveyPress }) => {
     return `${formattedHour}:${minutes} ${ampm}`;
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-ES', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
+
   return (
     <View style={styles.card}>
       <Text style={styles.title}>{event.descripcion}</Text>
       <View style={styles.detailsContainer}>
-        <Text style={styles.detail}>Hora: {formatTime(event.hora)}</Text>
         <Text style={styles.detail}>Lugar: {event.lugar}</Text>
         <Text style={styles.detail}>Expositor: {event.expositor}</Text>
+        <Text style={styles.detail}>Hora: {formatTime(event.hora)}</Text>
+        <Text style={styles.detail}>Fecha: {formatDate(event.fecha)}</Text>
       </View>
       
       {event.status === 'Responder Encuesta' && (

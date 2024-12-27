@@ -31,7 +31,7 @@ try {
         LEFT JOIN calificaciones c ON e.id = c.id_evento AND c.id_usuario = ?
         LEFT JOIN habilitacion_calificacion hc ON e.id = hc.id_evento
         WHERE hc.fecha_habilitada IS NOT NULL
-        ORDER BY e.fecha DESC, e.hora ASC
+        ORDER BY e.fecha ASC, e.hora ASC
     ";
 
     $stmt = $connection->prepare($query);

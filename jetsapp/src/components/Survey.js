@@ -13,15 +13,31 @@ const Survey = ({ route, navigation }) => {
   const { event } = route.params;
   const [selectedRating, setSelectedRating] = useState(null);
 
+  const formatTime = (timeString) => {
+    const [hours, minutes] = timeString.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const formattedHour = hour % 12 || 12;
+    return `${formattedHour}:${minutes} ${ampm}`;
+  };
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-ES', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
+
   const handleSubmit = async () => {
     if (!selectedRating) {
       Alert.alert('Error', 'Por favor seleccione una calificación');
       return;
     }
-
+  
     try {
       const userId = await AsyncStorage.getItem('userId');
-      const response = await fetch(getApiUrl('/submit_survey.php'), {
+      const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.SUBMIT_SURVEY), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,15 +45,18 @@ const Survey = ({ route, navigation }) => {
         body: JSON.stringify({
           userId: parseInt(userId),
           eventId: event.id,
-          rating: selectedRating
+          rating: selectedRating,
         }),
       });
-
+  
       const data = await response.json();
-      
+  
       if (data.success) {
         Alert.alert('Éxito', 'Calificación enviada correctamente', [
-          { text: 'OK', onPress: () => navigation.navigate('Form') }
+          { 
+            text: 'OK', 
+            onPress: () => navigation.goBack()
+          },
         ]);
       } else {
         Alert.alert('Error', data.message);
@@ -47,7 +66,6 @@ const Survey = ({ route, navigation }) => {
       Alert.alert('Error', 'Ocurrió un error al enviar la calificación');
     }
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.card}>
@@ -55,6 +73,8 @@ const Survey = ({ route, navigation }) => {
         <View style={styles.detailsContainer}>
           <Text style={styles.detail}>Lugar: {event.lugar}</Text>
           <Text style={styles.detail}>Expositor: {event.expositor}</Text>
+          <Text style={styles.detail}>Hora: {formatTime(event.hora)}</Text>
+          <Text style={styles.detail}>Fecha: {formatDate(event.fecha)}</Text>
         </View>
       </View>
 
