@@ -149,6 +149,8 @@ export default function App() {
                 fontWeight: '900',
                 fontSize: 18,
               },
+              headerBackTitleVisible: false,
+              headerBackTitle: '',
             }}
           />
         </Stack.Navigator>
