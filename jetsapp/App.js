@@ -23,8 +23,8 @@ export default function App() {
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        const userData = await AsyncStorage.getItem('userData');
-        if (userData) {
+        const loginStatus = await AsyncStorage.getItem('loginStatus');
+        if (loginStatus === 'true') {
           setInitialRoute('DrawerNavigation');
         }
       } catch (error) {

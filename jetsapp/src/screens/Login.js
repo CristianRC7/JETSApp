@@ -16,14 +16,27 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Eye, EyeOff } from 'lucide-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import { getApiUrl, API_CONFIG } from '../config/Config';
 
 const Login = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
+
+  const storeUserData = async (data) => {
+    try {
+      await AsyncStorage.multiSet([
+        ['userId', data.id.toString()],
+        ['username', data.usuario],
+        ['fullName', data.nombre_completo],
+        ['loginStatus', 'true']
+      ]);
+    } catch (error) {
+      console.error('Error storing user data:', error);
+      throw error;
+    }
+  };
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -31,7 +44,7 @@ const Login = ({ navigation }) => {
       return;
     }
 
-    setLoading(true); 
+    setLoading(true);
     try {
       const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.LOGIN), {
         method: 'POST',
@@ -48,7 +61,7 @@ const Login = ({ navigation }) => {
       console.log('Respuesta del servidor:', data);
 
       if (data.status === 'success') {
-        await AsyncStorage.setItem('userData', JSON.stringify(data));
+        await storeUserData(data);
         navigation.replace('DrawerNavigation');
       } else {
         Alert.alert('Error', data.message);
@@ -60,7 +73,6 @@ const Login = ({ navigation }) => {
       setLoading(false);
     }
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView 

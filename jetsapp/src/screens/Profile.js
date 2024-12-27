@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 const Profile = () => {
@@ -11,14 +10,22 @@ const Profile = () => {
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const jsonValue = await AsyncStorage.getItem('userData');
-        console.log('Datos recuperados de AsyncStorage:', jsonValue);
-        if (jsonValue != null) {
-          const parsedData = JSON.parse(jsonValue);
-          setUserData(parsedData);
+        const userDataKeys = ['userId', 'username', 'fullName'];
+        const results = await AsyncStorage.multiGet(userDataKeys);
+        
+        const data = {};
+        results.forEach(([key, value]) => {
+          if (value) {
+            data[key] = value;
+          }
+        });
+
+        if (Object.keys(data).length > 0) {
+          setUserData(data);
         }
       } catch (error) {
         console.error('Error getting user data:', error);
+        Alert.alert('Error', 'No se pudieron cargar los datos del usuario');
       }
     };
 
@@ -41,7 +48,6 @@ const Profile = () => {
   };
 
   if (!userData) {
-    console.log('No hay datos de usuario disponibles');
     return (
       <View style={styles.container}>
         <Text>Cargando datos del usuario...</Text>
@@ -49,12 +55,10 @@ const Profile = () => {
     );
   }
 
-  console.log('Renderizando perfil con datos:', userData);
-
   return (
     <View style={styles.container}>
-      <Text style={styles.welcome}>¡Bienvenido {userData.nombre_completo}!</Text>
-      <Text style={styles.userInfo}>Usuario: @{userData.usuario}</Text>
+      <Text style={styles.welcome}>¡Bienvenido {userData.fullName}!</Text>
+      <Text style={styles.userInfo}>Usuario: @{userData.username}</Text>
       
       <TouchableOpacity 
         style={styles.logoutButton}
