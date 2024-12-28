@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import QRCode from 'react-native-qrcode-svg';
 
 const QrSection = () => {
   const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -24,6 +25,8 @@ const QrSection = () => {
         }
       } catch (error) {
         console.error('Error getting user data:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -34,21 +37,28 @@ const QrSection = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Mi QR JETS</Text>
       
-      {userData && (
-        <View style={styles.qrContainer}>
-          <QRCode
-            value={JSON.stringify({
-              id: userData.userId,
-              usuario: userData.username,
-              nombre_completo: userData.fullName
-            })}
-            size={200}
-            color="#000"
-            backgroundColor="#fff"
-          />
-          <Text style={styles.userName}>{userData.fullName}</Text>
-          <Text style={styles.userDetail}>@{userData.username}</Text>
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#cf152d" />
+          <Text style={styles.loadingText}>Cargando QR...</Text>
         </View>
+      ) : (
+        userData && (
+          <View style={styles.qrContainer}>
+            <QRCode
+              value={JSON.stringify({
+                id: userData.userId,
+                usuario: userData.username,
+                nombre_completo: userData.fullName
+              })}
+              size={200}
+              color="#000"
+              backgroundColor="#fff"
+            />
+            <Text style={styles.userName}>{userData.fullName}</Text>
+            <Text style={styles.userDetail}>@{userData.username}</Text>
+          </View>
+        )
       )}
     </View>
   );
@@ -95,6 +105,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     marginTop: 4,
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#666',
   },
 });
 
