@@ -47,7 +47,6 @@ CREATE TABLE calificaciones (
 );
 
 -- Tabla de gestiones
-
 CREATE TABLE gestion (
     id_gestion INT PRIMARY KEY AUTO_INCREMENT,
     gestion varchar(20) NOT NULL

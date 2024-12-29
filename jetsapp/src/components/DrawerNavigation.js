@@ -2,11 +2,12 @@ import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
-import { HomeIcon, UserIcon, QrCodeIcon } from 'lucide-react-native';
+import { HomeIcon, UserIcon, QrCodeIcon, ScrollText } from 'lucide-react-native';
 //Screens
 import Home from '../screens/Home';
-import Profile from '../screens/Profile';
 import QrSection from '../screens/QrSection';
+import Certificates from '../screens/Certificates';
+import Profile from '../screens/Profile';
 
 const Drawer = createDrawerNavigator();
 
@@ -61,6 +62,13 @@ const DrawerNavigation = () => {
         component={QrSection}
         options={{
           drawerIcon: ({ color }) => <QrCodeIcon color={color} />,
+        }}
+      />
+      <Drawer.Screen 
+        name="Mis Certificados" 
+        component={Certificates}
+        options={{
+          drawerIcon: ({ color }) => <ScrollText color={color} />,
         }}
       />
       <Drawer.Screen 
