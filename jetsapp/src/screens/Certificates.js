@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Award } from 'lucide-react-native';
+import { Award, Download } from 'lucide-react-native';
+// Variblaes para la base de datos
 import { getApiUrl, API_CONFIG } from '../config/Config';
 
 const Certificates = () => {
@@ -66,6 +67,23 @@ const Certificates = () => {
     fetchCertificates();
   };
 
+  
+
+  const handleDownload = async (certificateId) => {
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      if (!userId) {
+        throw new Error('Usuario no encontrado');
+      }
+
+      const downloadUrl = `${getApiUrl(API_CONFIG.ENDPOINTS.DOWNLOAD_CERTIFICATE)}?userId=${userId}&certificateId=${certificateId}`;
+      await Linking.openURL(downloadUrl);
+    } catch (error) {
+      console.error('Error al descargar certificado:', error);
+      setError('Error al descargar el certificado');
+    }
+  };
+
   const renderCertificate = ({ item: cert }) => (
     <View style={styles.certificateCard}>
       <Award size={48} color="#cf152d" />
@@ -75,6 +93,12 @@ const Certificates = () => {
           Certificado N° {cert.nro_certificado}
         </Text>
       </View>
+      <TouchableOpacity 
+        style={styles.downloadButton}
+        onPress={() => handleDownload(cert.nro_certificado)}
+      >
+        <Download size={24} color="#fff" />
+      </TouchableOpacity>
     </View>
   );
 
@@ -184,6 +208,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
     textAlign: 'center',
+  }, 
+  downloadButton: {
+    backgroundColor: '#cf152d',
+    padding: 8,
+    borderRadius: 8,
+    marginLeft: 8,
   },
 });
 

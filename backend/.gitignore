@@ -1,2 +1,4 @@
-certificates/
-library/
+library/vendor/
+library/composer*
+
+certificates/gestion*

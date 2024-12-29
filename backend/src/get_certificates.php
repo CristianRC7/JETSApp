@@ -22,7 +22,7 @@ try {
         FROM participacion p
         INNER JOIN gestion g ON p.id_gestion = g.id_gestion
         WHERE p.id_usuario = ?
-        ORDER BY g.gestion DESC
+        ORDER BY g.gestion ASC
     ";
 
     $stmt = $connection->prepare($query);
