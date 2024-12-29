@@ -44,7 +44,7 @@ const EventCardSkeleton = () => {
         {renderSkeletonItem('60%', 16)}
       </View>
       <View style={styles.detailsContainer}>
-        {[...Array(3)].map((_, index) => (
+        {[...Array(4)].map((_, index) => (
           <View key={index} style={styles.detail}>
             {renderSkeletonItem('15%', 16)}
             {renderSkeletonItem('80%', 16, 4)}
