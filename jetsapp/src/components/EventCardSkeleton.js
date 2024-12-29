@@ -39,12 +39,15 @@ const EventCardSkeleton = () => {
 
   return (
     <View style={styles.card}>
-      {renderSkeletonItem('80%', 24, 16)}
+      <View style={styles.header}>
+        {renderSkeletonItem(80, 16)}
+        {renderSkeletonItem('60%', 16)}
+      </View>
       <View style={styles.detailsContainer}>
-        {[...Array(4)].map((_, index) => (
+        {[...Array(3)].map((_, index) => (
           <View key={index} style={styles.detail}>
-            {renderSkeletonItem(80, 16)}
-            {renderSkeletonItem('100%', 16, 0)}
+            {renderSkeletonItem('15%', 16)}
+            {renderSkeletonItem('80%', 16, 4)}
           </View>
         ))}
       </View>
@@ -54,31 +57,35 @@ const EventCardSkeleton = () => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
+    backgroundColor: '#F9FAFB',
+    borderRadius: 16,
+    padding: 20,
     marginBottom: 16,
-    elevation: 3,
+    elevation: 4,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 3,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  header: {
+    marginBottom: 16,
+    flexDirection: 'column',
+    gap: 8,
   },
   skeleton: {
     backgroundColor: '#E5E7EB',
-    borderRadius: 4,
-    marginRight: 8,
+    borderRadius: 8,
   },
   detailsContainer: {
-    gap: 8,
+    gap: 12,
   },
   detail: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    gap: 12,
   },
 });
 

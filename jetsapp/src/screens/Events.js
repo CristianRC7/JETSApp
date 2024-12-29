@@ -4,7 +4,7 @@ import { View, StyleSheet, FlatList, Text, Linking, RefreshControl } from 'react
 import DateFilterButton from '../components/DateFilterButton';
 import EventCard from '../components/EventCard';
 import EventCardSkeleton from '../components/EventCardSkeleton';
-// Variblaes para la base de datos
+// Variables para la base de datos
 import { getApiUrl, API_CONFIG } from '../config/Config';
 
 const Events = () => {

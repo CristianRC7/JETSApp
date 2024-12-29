@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Award, Download } from 'lucide-react-native';
-// Variblaes para la base de datos
+// Variables para la base de datos
 import { getApiUrl, API_CONFIG } from '../config/Config';
 
 const Certificates = () => {

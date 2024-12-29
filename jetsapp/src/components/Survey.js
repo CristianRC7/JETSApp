@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //Components
 import Card from './Card';
-// Variblaes para la base de datos
+// Variables para la base de datos
 import { getApiUrl, API_CONFIG } from '../config/Config';
 
 const Survey = ({ route, navigation }) => {

@@ -16,7 +16,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Eye, EyeOff } from 'lucide-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// Variblaes para la base de datos
+// Variables para la base de datos
 import { getApiUrl, API_CONFIG } from '../config/Config';
 
 const Login = ({ navigation }) => {
