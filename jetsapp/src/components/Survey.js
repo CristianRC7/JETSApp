@@ -1,33 +1,12 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Alert
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getApiUrl, API_CONFIG } from '../config/Config';
+import Card from './Card';
 
 const Survey = ({ route, navigation }) => {
   const { event } = route.params;
   const [selectedRating, setSelectedRating] = useState(null);
-
-  const formatTime = (timeString) => {
-    const [hours, minutes] = timeString.split(':');
-    const hour = parseInt(hours);
-    const ampm = hour >= 12 ? 'PM' : 'AM';
-    const formattedHour = hour % 12 || 12;
-    return `${formattedHour}:${minutes} ${ampm}`;
-  };
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
-  };
 
   const handleSubmit = async () => {
     if (!selectedRating) {
@@ -66,17 +45,10 @@ const Survey = ({ route, navigation }) => {
       Alert.alert('Error', 'Ocurrió un error al enviar la calificación');
     }
   };
+
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.title}>{event.descripcion}</Text>
-        <View style={styles.detailsContainer}>
-          <Text style={styles.detail}>Lugar: {event.lugar}</Text>
-          <Text style={styles.detail}>Expositor: {event.expositor}</Text>
-          <Text style={styles.detail}>Hora: {formatTime(event.hora)}</Text>
-          <Text style={styles.detail}>Fecha: {formatDate(event.fecha)}</Text>
-        </View>
-      </View>
+      <Card event={event} showSurveyButton={false} />
 
       <View style={styles.ratingContainer}>
         <Text style={styles.ratingTitle}>Califica este evento:</Text>
@@ -124,30 +96,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#f5f5f5',
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 16,
-    marginBottom: 24,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    color: '#333',
-  },
-  detailsContainer: {
-    gap: 8,
-  },
-  detail: {
-    fontSize: 14,
-    color: '#666',
   },
   ratingContainer: {
     backgroundColor: '#fff',

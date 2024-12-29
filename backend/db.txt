@@ -29,6 +29,23 @@ CREATE TABLE inscripciones (
 );
 
 
+-- Tabla de habilitación de calificaciones de las encuestas
+CREATE TABLE habilitacion_calificacion (
+	id_evento INT PRIMARY KEY,
+	fecha_habilitada DATE NOT NULL,
+	FOREIGN KEY (id_evento) REFERENCES eventos(id)
+);
+
+-- Tabla de calificaciones de las encuestas
+CREATE TABLE calificaciones (
+	id_calificacion INT PRIMARY KEY AUTO_INCREMENT,
+	id_usuario INT,
+	id_evento INT,
+	calificacion TINYINT CHECK (calificacion BETWEEN 1 AND 5),
+	FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
+	FOREIGN KEY (id_evento) REFERENCES eventos(id)
+);
+
 -- Tabla de gestiones
 
 CREATE TABLE gestion (
@@ -46,22 +63,7 @@ CREATE TABLE participacion (
     FOREIGN KEY (id_gestion) REFERENCES gestion(id_gestion)
 );
 
--- Tabla de habilitación de calificaciones de las encuestas
-CREATE TABLE habilitacion_calificacion (
-	id_evento INT PRIMARY KEY,
-	fecha_habilitada DATE NOT NULL,
-	FOREIGN KEY (id_evento) REFERENCES eventos(id)
-);
 
--- Tabla de calificaciones de las encuestas
-CREATE TABLE calificaciones (
-	id_calificacion INT PRIMARY KEY AUTO_INCREMENT,
-	id_usuario INT,
-	id_evento INT,
-	calificacion TINYINT CHECK (calificacion BETWEEN 1 AND 5),
-	FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
-	FOREIGN KEY (id_evento) REFERENCES eventos(id)
-);
 
 -- Tabla de usuarios admin
 CREATE TABLE admin (
