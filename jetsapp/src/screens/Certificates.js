@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Award } from 'lucide-react-native';
 import { getApiUrl, API_CONFIG } from '../config/Config';
@@ -7,10 +7,8 @@ import { getApiUrl, API_CONFIG } from '../config/Config';
 const Certificates = () => {
   const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchCertificates();
-  }, []);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState(null);
 
   const fetchCertificates = async () => {
     try {
@@ -19,28 +17,75 @@ const Certificates = () => {
         throw new Error('Usuario no encontrado');
       }
 
+      console.log('Enviando solicitud a:', getApiUrl(API_CONFIG.ENDPOINTS.GET_CERTIFICATES));
+      
       const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.GET_CERTIFICATES), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
-        body: JSON.stringify({ userId: parseInt(userId) }),
+        body: JSON.stringify({ 
+          userId: parseInt(userId) 
+        }),
       });
 
-      const data = await response.json();
-      console.log('Respuesta del servidor:', data);
+      const responseText = await response.text();
+      console.log('Respuesta del servidor (texto):', responseText);
+
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('Error al parsear respuesta:', parseError);
+        throw new Error('Error en la respuesta del servidor');
+      }
+
+      console.log('Datos parseados:', data);
 
       if (data.success) {
         setCertificates(data.certificates);
       } else {
-        console.error('Error fetching certificates:', data.message);
+        throw new Error(data.message || 'Error al obtener certificados');
       }
     } catch (error) {
       console.error('Error:', error);
+      setError(error.message);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
+
+  useEffect(() => {
+    fetchCertificates();
+  }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchCertificates();
+  };
+
+  const renderCertificate = ({ item: cert }) => (
+    <View style={styles.certificateCard}>
+      <Award size={48} color="#cf152d" />
+      <View style={styles.certificateInfo}>
+        <Text style={styles.gestionText}>Gestión {cert.gestion}</Text>
+        <Text style={styles.certificateNumber}>
+          Certificado N° {cert.nro_certificado}
+        </Text>
+      </View>
+    </View>
+  );
+
+  const renderEmptyComponent = () => (
+    <View style={styles.emptyContainer}>
+      <Award size={64} color="#666" />
+      <Text style={styles.emptyText}>
+        No tienes certificados disponibles
+      </Text>
+    </View>
+  );
 
   if (loading) {
     return (
@@ -50,31 +95,26 @@ const Certificates = () => {
     );
   }
 
-  return (
-    <ScrollView style={styles.container}>
-      <View style={styles.content}>
-        {certificates.length > 0 ? (
-          certificates.map((cert, index) => (
-            <View key={index} style={styles.certificateCard}>
-              <Award size={48} color="#cf152d" />
-              <View style={styles.certificateInfo}>
-                <Text style={styles.gestionText}>Gestión {cert.gestion}</Text>
-                <Text style={styles.certificateNumber}>
-                  Certificado N° {cert.nro_certificado}
-                </Text>
-              </View>
-            </View>
-          ))
-        ) : (
-          <View style={styles.emptyContainer}>
-            <Award size={64} color="#666" />
-            <Text style={styles.emptyText}>
-              No tienes certificados disponibles
-            </Text>
-          </View>
-        )}
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Error: {error}</Text>
       </View>
-    </ScrollView>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={certificates}
+        renderItem={renderCertificate}
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={styles.content}
+        ListEmptyComponent={renderEmptyComponent}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+      />
+    </View>
   );
 };
 
@@ -85,11 +125,23 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
+    flexGrow: 1,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  errorText: {
+    color: '#cf152d',
+    textAlign: 'center',
+    fontSize: 16,
   },
   certificateCard: {
     flexDirection: 'row',
@@ -125,6 +177,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 32,
+    flex: 1,
   },
   emptyText: {
     marginTop: 16,
