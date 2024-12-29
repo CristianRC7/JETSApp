@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList, Text, Linking, RefreshControl } from 'react-native';
-import { getApiUrl, API_CONFIG } from '../config/Config';
+//Components
 import DateFilterButton from '../components/DateFilterButton';
 import EventCard from '../components/EventCard';
 import EventCardSkeleton from '../components/EventCardSkeleton';
+// Variblaes para la base de datos
+import { getApiUrl, API_CONFIG } from '../config/Config';
 
 const Events = () => {
   const [events, setEvents] = useState([]);

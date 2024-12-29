@@ -17,7 +17,6 @@ try {
         throw new Exception('ID de usuario no proporcionado');
     }
 
-    // Establecemos la zona horaria de Bolivia
     date_default_timezone_set('America/La_Paz');
     $currentDate = date('Y-m-d');
 
@@ -49,7 +48,6 @@ try {
 
     $eventos = [];
     while ($row = $result->fetch_assoc()) {
-        // Aseguramos que la fecha esté en el formato correcto
         $row['fecha'] = date('Y-m-d', strtotime($row['fecha']));
         $eventos[] = $row;
     }

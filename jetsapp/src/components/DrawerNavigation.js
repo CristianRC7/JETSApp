@@ -2,10 +2,11 @@ import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import { HomeIcon, UserIcon, QrCodeIcon } from 'lucide-react-native';
+//Screens
 import Home from '../screens/Home';
 import Profile from '../screens/Profile';
 import QrSection from '../screens/QrSection';
-import { HomeIcon, UserIcon, QrCodeIcon } from 'lucide-react-native';
 
 const Drawer = createDrawerNavigator();
 

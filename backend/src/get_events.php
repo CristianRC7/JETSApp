@@ -5,10 +5,8 @@ require_once '../db/cors.php';
 header('Content-Type: application/json');
 
 try {
-    // Establecer la zona horaria a Bolivia
     date_default_timezone_set('America/La_Paz');
     
-    // Usar DATE_FORMAT para asegurar un formato de fecha consistente
     $query = "SELECT id, hora, descripcion, lugar, expositor, 
               DATE_FORMAT(fecha, '%Y-%m-%d') as fecha 
               FROM eventos 
@@ -22,7 +20,6 @@ try {
 
     $events = array();
     while ($row = mysqli_fetch_assoc($result)) {
-        // Asegurar que la fecha esté en el formato correcto
         $row['fecha'] = date('Y-m-d', strtotime($row['fecha']));
         $events[] = $row;
     }

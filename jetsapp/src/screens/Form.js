@@ -9,10 +9,12 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+//Components
 import EventFormCard from '../components/EventFormCard';
 import EventCardSkeleton from '../components/EventCardSkeleton';
+// Variblaes para la base de datos
 import { getApiUrl, API_CONFIG } from '../config/Config';
-import { useFocusEffect } from '@react-navigation/native';
 
 const Form = ({ navigation, route }) => {
   const [events, setEvents] = useState([]);
