@@ -10,7 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $usuario = $data['usuario'];
         $contrasena = $data['contrasena'];
 
-        $query = "SELECT id, usuario, nombre_completo FROM usuarios WHERE usuario = ? AND contrasena = ?";
+        $query = "SELECT u.id, u.usuario, u.nombre_completo, 
+                 CASE WHEN a.id_admin IS NOT NULL THEN 1 ELSE 0 END as is_admin 
+                 FROM usuarios u 
+                 LEFT JOIN admin a ON u.id = a.id_usuario 
+                 WHERE u.usuario = ? AND u.contrasena = ?";
+        
         $stmt = mysqli_prepare($connection, $query);
         mysqli_stmt_bind_param($stmt, "ss", $usuario, $contrasena);
         mysqli_stmt_execute($stmt);
@@ -22,7 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'message' => 'Login exitoso',
                 'id' => $row['id'],
                 'usuario' => $row['usuario'],
-                'nombre_completo' => $row['nombre_completo']
+                'nombre_completo' => $row['nombre_completo'],
+                'is_admin' => $row['is_admin']
             );
             http_response_code(200);
         } else {

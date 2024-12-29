@@ -31,6 +31,7 @@ const Login = ({ navigation }) => {
         ['userId', data.id.toString()],
         ['username', data.usuario],
         ['fullName', data.nombre_completo],
+        ['isAdmin', data.is_admin.toString()],
         ['loginStatus', 'true']
       ]);
     } catch (error) {
