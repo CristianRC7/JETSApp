@@ -78,6 +78,7 @@ const Certificates = () => {
         throw new Error('Usuario no encontrado');
       }
 
+      console.log('Enviando solicitud a:', getApiUrl(API_CONFIG.ENDPOINTS.DOWNLOAD_CERTIFICATE));
       const downloadUrl = `${getApiUrl(API_CONFIG.ENDPOINTS.DOWNLOAD_CERTIFICATE)}?userId=${userId}&certificateId=${certificateId}`;
       await Linking.openURL(downloadUrl);
     } catch (error) {

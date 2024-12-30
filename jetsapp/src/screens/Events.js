@@ -24,6 +24,7 @@ const Events = () => {
 
   const fetchEvents = async () => {
     try {
+      console.log('Enviando solicitud a:', getApiUrl(API_CONFIG.ENDPOINTS.GET_EVENTS));
       const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.GET_EVENTS));
       const data = await response.json();
       if (data.status === 'success') {

@@ -48,6 +48,7 @@ const Login = ({ navigation }) => {
 
     setLoading(true);
     try {
+      console.log('Enviando solicitud a:', getApiUrl(API_CONFIG.ENDPOINTS.LOGIN));
       const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.LOGIN), {
         method: 'POST',
         headers: {

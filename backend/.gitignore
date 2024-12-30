@@ -1,4 +1,2 @@
-library/vendor/
-library/composer*
-
-certificates/gestion*
+.env*
+env*

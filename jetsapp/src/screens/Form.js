@@ -30,6 +30,7 @@ const Form = ({ navigation, route }) => {
         throw new Error('Usuario no encontrado');
       }
 
+      console.log('Enviando solicitud a:', getApiUrl(API_CONFIG.ENDPOINTS.GET_FORMS));
       const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.GET_FORMS), {
         method: 'POST',
         headers: {

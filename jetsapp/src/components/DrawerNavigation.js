@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //Screens
 import Home from '../screens/Home';
 import QrSection from '../screens/QrSection';
+import Scanner from '../screens/Scanner';
 import Certificates from '../screens/Certificates';
 import Profile from '../screens/Profile';
 
@@ -83,7 +84,7 @@ const DrawerNavigation = () => {
       {isAdmin && (
         <Drawer.Screen 
           name="Escaner QR" 
-          component={QrSection}
+          component={Scanner}
           options={{
             drawerIcon: ({ color }) => <ScanLine color={color} />,
           }}
