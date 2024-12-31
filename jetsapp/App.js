@@ -15,6 +15,7 @@ import Support from './src/screens/Support';
 //Components
 import DrawerNavigation from './src/components/DrawerNavigation';
 import Survey from './src/components/Survey';
+import AddEventUser from './src/components/AddEventUser';
 
 const Stack = createStackNavigator();
 
@@ -141,6 +142,24 @@ export default function App() {
             options={{
               headerShown: true,
               headerTitle: 'Calificar Evento',
+              headerStyle: {
+                backgroundColor: '#cf152d',
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: '900',
+                fontSize: 18,
+              },
+              headerBackTitleVisible: false,
+              headerBackTitle: '',
+            }}
+          />
+          <Stack.Screen 
+            name="AddEventUser" 
+            component={AddEventUser}
+            options={{
+              headerShown: true,
+              headerTitle: 'Registrar usuario en evento',
               headerStyle: {
                 backgroundColor: '#cf152d',
               },
