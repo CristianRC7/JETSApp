@@ -45,7 +45,7 @@ const Form = ({ navigation, route }) => {
       if (data.success) {
         setEvents(data.eventos);
       } else {
-        console.error('Error fetching events:', data.message);
+        console.error('Error al obtener los eventos:', data.message);
       }
     } catch (error) {
       console.error('Error:', error);

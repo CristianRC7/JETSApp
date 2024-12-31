@@ -33,7 +33,7 @@ const Events = () => {
       setLoading(false);
       setRefreshing(false);
     } catch (error) {
-      console.error('Error fetching events:', error);
+      console.error('Error al obtener los eventos:', error);
       setLoading(false);
       setRefreshing(false);
     }

@@ -25,12 +25,21 @@ const Login = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const toTitleCase = (str) => {
+    return str
+      .toLowerCase()
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
   const storeUserData = async (data) => {
     try {
+      const formattedFullName = toTitleCase(data.nombre_completo);
       await AsyncStorage.multiSet([
         ['userId', data.id.toString()],
         ['username', data.usuario],
-        ['fullName', data.nombre_completo],
+        ['fullName', formattedFullName],
         ['isAdmin', data.is_admin.toString()],
         ['loginStatus', 'true']
       ]);
@@ -39,6 +48,8 @@ const Login = ({ navigation }) => {
       throw error;
     }
   };
+
+  
 
   const handleLogin = async () => {
     if (!username || !password) {

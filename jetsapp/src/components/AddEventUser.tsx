@@ -41,22 +41,22 @@ const AddEventUser = ({ route, navigation }) => {
 
   const fetchEnabledEvents = async () => {
     try {
-      console.log('Fetching events from:', getApiUrl(API_CONFIG.ENDPOINTS.GET_ENABLED_EVENTS));
+      console.log('Obteniendo los eventos de:', getApiUrl(API_CONFIG.ENDPOINTS.GET_ENABLED_EVENTS));
       const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.GET_ENABLED_EVENTS));
       const responseText = await response.text();
-      console.log('Raw response:', responseText);
+      console.log('Repuesta:', responseText);
 
       const data = JSON.parse(responseText);
-      console.log('Parsed events data:', data);
+      console.log('Datos parseados:', data);
 
       if (data.status === 'success') {
         setEvents(data.events || []);
       } else {
-        console.error('Error in response:', data.message);
+        console.error('Error:', data.message);
         Alert.alert('Error', 'No se pudieron cargar los eventos');
       }
     } catch (error) {
-      console.error('Error fetching events:', error);
+      console.error('Error al obtener los eventos:', error);
       Alert.alert('Error', 'Error al conectar con el servidor');
     } finally {
       setLoading(false);
@@ -77,7 +77,7 @@ const AddEventUser = ({ route, navigation }) => {
       });
 
       const data = await response.json();
-      console.log('Inscription response:', data);
+      console.log('Respuesta del servidor:', data);
       
       if (data.status === 'success') {
         Alert.alert('Éxito', 'Usuario inscrito correctamente', [
@@ -90,7 +90,7 @@ const AddEventUser = ({ route, navigation }) => {
         Alert.alert('Error', data.message || 'No se pudo inscribir al usuario');
       }
     } catch (error) {
-      console.error('Error adding inscription:', error);
+      console.error('Error al agregar inscripccion:', error);
       Alert.alert('Error', 'Error al conectar con el servidor');
     }
   };
@@ -128,7 +128,10 @@ const AddEventUser = ({ route, navigation }) => {
             <Text style={styles.eventDetail}>Expositor: {item.expositor}</Text>
             <Text style={styles.eventDetail}>Lugar: {item.lugar}</Text>
             <Text style={styles.eventDetail}>
-              {formatDate(item.fecha)} - {formatTime(item.hora)}
+              Fecha: {formatDate(item.fecha)} 
+            </Text>
+            <Text style={styles.eventDetail}>
+              Hora: {formatTime(item.hora)}
             </Text>
           </TouchableOpacity>
         )}
