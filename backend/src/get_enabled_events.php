@@ -5,6 +5,9 @@ require_once '../db/cors.php';
 header('Content-Type: application/json');
 
 try {
+
+    date_default_timezone_set('America/La_Paz');
+
     $query = "SELECT e.id, e.descripcion, e.fecha, e.hora, e.lugar, e.expositor 
               FROM eventos e 
               INNER JOIN habilitacion_calificacion h ON e.id = h.id_evento 
@@ -18,6 +21,7 @@ try {
 
     $events = array();
     while ($row = mysqli_fetch_assoc($result)) {
+        $row['fecha'] = date('Y-m-d', strtotime($row['fecha']));
         $events[] = $row;
     }
 

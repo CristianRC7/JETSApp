@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { getApiUrl, API_CONFIG } from '../config/Config';
+import EventCardSkeleton from './EventCardSkeleton';
 
 const AddEventUser = ({ route, navigation }) => {
   const [events, setEvents] = useState([]);
@@ -18,6 +19,25 @@ const AddEventUser = ({ route, navigation }) => {
   useEffect(() => {
     fetchEnabledEvents();
   }, []);
+
+  const formatTime = (timeString) => {
+    const [hours, minutes] = timeString.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const formattedHour = hour % 12 || 12;
+    return `${formattedHour}:${minutes} ${ampm}`;
+  };
+  
+  const formatDate = (dateString) => {
+    const date = new Date(dateString + 'T00:00:00');
+    return date.toLocaleDateString('es-ES', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'America/La_Paz'
+    });
+  };
+
 
   const fetchEnabledEvents = async () => {
     try {
@@ -77,8 +97,12 @@ const AddEventUser = ({ route, navigation }) => {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#cf152d" />
+      <View style={styles.container}>
+        <View style={styles.container}>
+          {[...Array(4)].map((_, index) => (
+            <EventCardSkeleton key={index} />
+          ))}
+        </View>
       </View>
     );
   }
@@ -101,11 +125,11 @@ const AddEventUser = ({ route, navigation }) => {
             onPress={() => handleEventSelection(item.id)}
           >
             <Text style={styles.eventTitle}>{item.descripcion}</Text>
-            <Text style={styles.eventDetail}>
-              {item.fecha} - {item.hora}
-            </Text>
-            <Text style={styles.eventDetail}>{item.lugar}</Text>
             <Text style={styles.eventDetail}>Expositor: {item.expositor}</Text>
+            <Text style={styles.eventDetail}>Lugar: {item.lugar}</Text>
+            <Text style={styles.eventDetail}>
+              {formatDate(item.fecha)} - {formatTime(item.hora)}
+            </Text>
           </TouchableOpacity>
         )}
         ListEmptyComponent={
