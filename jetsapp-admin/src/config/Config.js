@@ -1,16 +1,21 @@
 export const API_CONFIG = {
   BASE_URL: 'http://localhost/JetsApp/backend/src/ad',
   ENDPOINTS: {
-    LOGIN: '/Login.php',
-    //EVENTOS
-    GET_EVENTS: '/GetEvents.php',
-    CREATE_EVENT: '/CreateEvent.php',
-    UPDATE_EVENT: '/UpdateEvent.php',
-    DELETE_EVENT: '/DeleteEvent.php',
+      LOGIN: '/Login.php',
+      // EVENTOS
+      GET_EVENTS: '/GetEvents.php',
+      CREATE_EVENT: '/CreateEvent.php',
+      UPDATE_EVENT: '/UpdateEvent.php',
+      DELETE_EVENT: '/DeleteEvent.php',
+      // USUARIOS
+      GET_USERS: '/GetUsers.php',
+      CREATE_USER: '/CreateUser.php',
+      UPDATE_USER: '/UpdateUser.php',
+      DELETE_USER: '/DeleteUser.php',
+      TOGGLE_ADMIN: '/ToggleAdmin.php'
   }
 };
 
 export const getApiUrl = (endpoint) => {
   return `${API_CONFIG.BASE_URL}${endpoint}`;
 };
-
