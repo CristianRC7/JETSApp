@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Events from './pages/Events';
 import Users from './pages/Users';
+import Certificates from './pages/Certificates';
 import Sidebar from './components/Sidebar';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
@@ -27,6 +28,16 @@ function App() {
                         <ProtectedRoute>
                             <Sidebar>
                                 <Users />
+                            </Sidebar>
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/certificates"
+                    element={
+                        <ProtectedRoute>
+                            <Sidebar>
+                                <Certificates />
                             </Sidebar>
                         </ProtectedRoute>
                     }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Calendar, Users } from 'lucide-react';
+import { Menu, X, Calendar, Users, BookOpenText } from 'lucide-react';
 
 export default function Sidebar({ children }) {
     const [isOpen, setIsOpen] = useState(true);
@@ -34,6 +34,15 @@ export default function Sidebar({ children }) {
                     >
                         <Users size={20} />
                         {isOpen && <span className="ml-4">Usuarios</span>}
+                    </Link>
+                    <Link
+                        to="/certificates"
+                        className={`flex items-center p-4 hover:bg-gray-700 ${
+                            location.pathname === '/certificates' ? 'bg-gray-700' : ''
+                        }`}
+                    >
+                        <BookOpenText size={20} />
+                        {isOpen && <span className="ml-4">Certificados</span>}
                     </Link>
                 </nav>
             </div>

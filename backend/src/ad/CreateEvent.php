@@ -11,14 +11,21 @@ try {
         throw new Exception('No se recibieron datos');
     }
 
-    $fecha = $data['fecha'];
+    // Convertir la fecha al formato de MySQL
+    $fechaParts = explode('/', $data['fecha']);
+    if (count($fechaParts) === 3) {
+        $fecha = $fechaParts[2] . '-' . $fechaParts[1] . '-' . $fechaParts[0];
+    } else {
+        throw new Exception('Formato de fecha inválido');
+    }
+
     $hora = $data['hora'];
     $descripcion = $data['descripcion'];
     $lugar = $data['lugar'];
     $expositor = $data['expositor'];
 
     $query = "INSERT INTO eventos (fecha, hora, descripcion, lugar, expositor) 
-              VALUES (?, ?, ?, ?, ?)";
+              VALUES (STR_TO_DATE(?, '%Y-%m-%d'), ?, ?, ?, ?)";
               
     $stmt = mysqli_prepare($connection, $query);
     mysqli_stmt_bind_param($stmt, "sssss", $fecha, $hora, $descripcion, $lugar, $expositor);

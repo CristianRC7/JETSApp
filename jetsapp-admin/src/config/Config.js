@@ -17,7 +17,12 @@ export const API_CONFIG = {
       GET_CALIFICACION: '/GetCalificacionHabilitada.php',
       CREATE_CALIFICACION: '/CreateCalificacionHabilitada.php',
       UPDATE_CALIFICACION: '/UpdateCalificacionHabilitada.php',
-      DELETE_CALIFICACION: '/DeleteCalificacionHabilitada.php'
+      DELETE_CALIFICACION: '/DeleteCalificacionHabilitada.php',
+      // GESTIONES
+      GET_GESTIONES: '/GetGestiones.php',
+      CREATE_GESTION: '/CreateGestion.php',
+      UPDATE_GESTION: '/UpdateGestion.php',
+      DELETE_GESTION: '/DeleteGestion.php'
   }
 };
 
