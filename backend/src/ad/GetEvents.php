@@ -7,18 +7,18 @@ header('Content-Type: application/json');
 try {
     global $connection;
     
-    // Get pagination parameters
+    // Paginación
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $limit = 20;
     $offset = ($page - 1) * $limit;
     
-    // Get total count of events
+    // obtengo el total de eventos
     $countQuery = "SELECT COUNT(*) as total FROM eventos";
     $countResult = mysqli_query($connection, $countQuery);
     $totalEvents = mysqli_fetch_assoc($countResult)['total'];
     $totalPages = ceil($totalEvents / $limit);
     
-    // Get paginated events
+    // obtengo los eventos
     $query = "SELECT id, DATE_FORMAT(fecha, '%d/%m/%Y') as fecha, 
               TIME_FORMAT(hora, '%H:%i') as hora, 
               descripcion, lugar, expositor 
