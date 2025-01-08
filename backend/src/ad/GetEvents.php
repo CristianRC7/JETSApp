@@ -7,13 +7,29 @@ header('Content-Type: application/json');
 try {
     global $connection;
     
-    $query = "SELECT id, DATE_FORMAT(fecha, '%Y-%m-%d') as fecha, 
+    // Get pagination parameters
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $limit = 20;
+    $offset = ($page - 1) * $limit;
+    
+    // Get total count of events
+    $countQuery = "SELECT COUNT(*) as total FROM eventos";
+    $countResult = mysqli_query($connection, $countQuery);
+    $totalEvents = mysqli_fetch_assoc($countResult)['total'];
+    $totalPages = ceil($totalEvents / $limit);
+    
+    // Get paginated events
+    $query = "SELECT id, DATE_FORMAT(fecha, '%d/%m/%Y') as fecha, 
               TIME_FORMAT(hora, '%H:%i') as hora, 
               descripcion, lugar, expositor 
               FROM eventos 
-              ORDER BY fecha ASC, hora ASC";
+              ORDER BY fecha ASC, hora ASC
+              LIMIT ? OFFSET ?";
               
-    $result = mysqli_query($connection, $query);
+    $stmt = mysqli_prepare($connection, $query);
+    mysqli_stmt_bind_param($stmt, "ii", $limit, $offset);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
     if (!$result) {
         throw new Exception(mysqli_error($connection));
@@ -26,7 +42,13 @@ try {
 
     echo json_encode([
         'success' => true,
-        'events' => $events
+        'events' => $events,
+        'pagination' => [
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalEvents' => $totalEvents,
+            'eventsPerPage' => $limit
+        ]
     ]);
 
     mysqli_close($connection);
