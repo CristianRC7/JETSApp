@@ -11,17 +11,26 @@ try {
     $limit = 20;
     $offset = ($page - 1) * $limit;
     
-    // Obtenemos el total de usuarios
-    $countQuery = "SELECT COUNT(*) as total FROM usuarios";
+    $searchTerm = isset($_GET['search']) ? mysqli_real_escape_string($connection, $_GET['search']) : '';
+    
+    // Condiciones de búsqueda
+    $searchCondition = '';
+    if ($searchTerm !== '') {
+        $searchCondition = "WHERE u.nombre_completo LIKE '%$searchTerm%' OR u.usuario LIKE '%$searchTerm%'";
+    }
+    
+    // Obtener total de usuarios y páginas
+    $countQuery = "SELECT COUNT(*) as total FROM usuarios u $searchCondition";
     $countResult = mysqli_query($connection, $countQuery);
     $totalUsers = mysqli_fetch_assoc($countResult)['total'];
     $totalPages = ceil($totalUsers / $limit);
     
-    // Obtenemos los usuarios
+    // Obtener usuarios
     $query = "SELECT u.id, u.usuario, u.nombre_completo, 
               CASE WHEN a.id_admin IS NOT NULL THEN 1 ELSE 0 END as is_admin 
               FROM usuarios u 
               LEFT JOIN admin a ON u.id = a.id_usuario 
+              $searchCondition
               ORDER BY u.nombre_completo ASC 
               LIMIT ? OFFSET ?";
               

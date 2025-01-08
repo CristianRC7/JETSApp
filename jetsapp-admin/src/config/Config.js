@@ -22,7 +22,14 @@ export const API_CONFIG = {
       GET_GESTIONES: '/GetGestiones.php',
       CREATE_GESTION: '/CreateGestion.php',
       UPDATE_GESTION: '/UpdateGestion.php',
-      DELETE_GESTION: '/DeleteGestion.php'
+      DELETE_GESTION: '/DeleteGestion.php',
+      // Participaciones
+      GET_PARTICIPACIONES: '/GetParticipaciones.php',
+      CREATE_PARTICIPACION: '/CreateParticipacion.php',
+      UPDATE_PARTICIPACION: '/UpdateParticipacion.php',
+      DELETE_PARTICIPACION: '/DeleteParticipacion.php',
+    
+  
   }
 };
 

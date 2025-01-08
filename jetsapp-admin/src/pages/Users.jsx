@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { getApiUrl, API_CONFIG } from '../config/Config';
 import Pagination from '../components/Pagination';
 import UserModal from '../components/UserModal';
-import { Pencil, Trash2, Plus, Shield } from "lucide-react";
+import SearchBar from '../components/SearchBar';
+import ParticipacionModal from '../components/ParticipacionModal';
+import { Pencil, Trash2, Plus, Shield, Eye } from "lucide-react";
 import Swal from 'sweetalert2';
 
 export default function Users() {
@@ -13,11 +15,16 @@ export default function Users() {
     const [selectedUser, setSelectedUser] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [isParticipacionModalOpen, setIsParticipacionModalOpen] = useState(false);
+    const [selectedUserForParticipacion, setSelectedUserForParticipacion] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const fetchUsers = async (page = 1) => {
         try {
             setLoading(true);
-            const response = await fetch(`${getApiUrl(API_CONFIG.ENDPOINTS.GET_USERS)}?page=${page}`);
+            const response = await fetch(
+                `${getApiUrl(API_CONFIG.ENDPOINTS.GET_USERS)}?page=${page}${searchTerm ? `&search=${searchTerm}` : ''}`
+            );
             const data = await response.json();
             
             if (data.success) {
@@ -36,7 +43,12 @@ export default function Users() {
 
     useEffect(() => {
         fetchUsers(currentPage);
-    }, [currentPage]);
+    }, [currentPage, searchTerm]);
+
+    const handleSearch = (term) => {
+        setSearchTerm(term);
+        setCurrentPage(1);
+    };
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -173,6 +185,7 @@ export default function Users() {
         );
     }
 
+
     return (
         <>
             <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -191,6 +204,10 @@ export default function Users() {
                             <Plus className="h-5 w-5 mr-2" />
                             Crear Usuario
                         </button>
+                    </div>
+
+                    <div className="mb-6">
+                        <SearchBar onSearch={handleSearch} />
                     </div>
 
                     <div className="mt-8 flex flex-col">
@@ -248,6 +265,15 @@ export default function Users() {
                                                                 >
                                                                     <Shield className="h-5 w-5" />
                                                                 </button>
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setSelectedUserForParticipacion(user);
+                                                                        setIsParticipacionModalOpen(true);
+                                                                    }}
+                                                                    className="p-1 text-purple-600 hover:text-purple-900"
+                                                                >
+                                                                    <Eye className="h-5 w-5" />
+                                                                </button>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -276,6 +302,14 @@ export default function Users() {
                 }}
                 onSubmit={selectedUser ? handleUpdate : handleCreate}
                 user={selectedUser}
+            />
+            <ParticipacionModal
+                isOpen={isParticipacionModalOpen}
+                onClose={() => {
+                    setIsParticipacionModalOpen(false);
+                    setSelectedUserForParticipacion(null);
+                }}
+                user={selectedUserForParticipacion}
             />
         </>
     );
