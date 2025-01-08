@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { getApiUrl, API_CONFIG } from '../config/Config';
 import Modal from '../components/Modal';
+import CalificacionModal from '../components/CalificacionModal';
 import Pagination from '../components/Pagination';
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Pencil, Trash2, Plus, Calendar } from "lucide-react";
 import Swal from 'sweetalert2';
 
 export default function Events() {
@@ -13,7 +14,10 @@ export default function Events() {
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-
+    const [isCalificacionModalOpen, setIsCalificacionModalOpen] = useState(false);
+    const [selectedEventForCalificacion, setSelectedEventForCalificacion] = useState(null);
+    const [fechaHabilitada, setFechaHabilitada] = useState(null);
+    const [eventosHabilitados, setEventosHabilitados] = useState(new Set());
     const fetchEvents = async (page = 1) => {
         try {
             setLoading(true);
@@ -24,6 +28,17 @@ export default function Events() {
                 setEvents(data.events || []);
                 setTotalPages(data.pagination.totalPages);
                 setCurrentPage(data.pagination.currentPage);
+                
+                // Verificar el estado de habilitación para cada evento
+                const habilitados = new Set();
+                await Promise.all(data.events.map(async (event) => {
+                    const response = await fetch(`${getApiUrl(API_CONFIG.ENDPOINTS.GET_CALIFICACION)}?id_evento=${event.id}`);
+                    const calificacionData = await response.json();
+                    if (calificacionData.success && calificacionData.habilitada) {
+                        habilitados.add(event.id);
+                    }
+                }));
+                setEventosHabilitados(habilitados);
             } else {
                 setError(data.message || 'Error al cargar los eventos');
             }
@@ -43,7 +58,33 @@ export default function Events() {
     };
 
 
+    const checkCalificacionHabilitada = async (event) => {
+        try {
+            const response = await fetch(`${getApiUrl(API_CONFIG.ENDPOINTS.GET_CALIFICACION)}?id_evento=${event.id}`);
+            const data = await response.json();
+            
+            if (data.success) {
+                setSelectedEventForCalificacion(event);
+                setFechaHabilitada(data.habilitada ? data.fecha : null);
+                setIsCalificacionModalOpen(true);
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error al verificar la habilitación'
+            });
+        }
+    };
 
+    const handleCalificacionModalClose = (shouldRefresh) => {
+        setIsCalificacionModalOpen(false);
+        setSelectedEventForCalificacion(null);
+        setFechaHabilitada(null);
+        if (shouldRefresh) {
+            fetchEvents(currentPage);
+        }
+    };
     
     const handleCreate = async (formData) => {
         const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.CREATE_EVENT), {
@@ -203,9 +244,15 @@ export default function Events() {
                                                                 >
                                                                     <Trash2 className="h-5 w-5" />
                                                                 </button>
+                                                                <button
+                                                                    onClick={() => checkCalificacionHabilitada(event)}
+                                                                    className={`p-1 ${eventosHabilitados.has(event.id) ? 'text-yellow-500 hover:text-yellow-600' : 'text-green-600 hover:text-green-700'}`}
+                                                                >
+                                                                    <Calendar className="h-5 w-5" />
+                                                                </button>
                                                             </div>
                                                         </td>
-                                                    </tr>
+                                                        </tr>
                                                 ))
                                             )}
                                         </tbody>
@@ -231,6 +278,12 @@ export default function Events() {
                 }}
                 onSubmit={selectedEvent ? handleUpdate : handleCreate}
                 event={selectedEvent}
+            />
+            <CalificacionModal
+                isOpen={isCalificacionModalOpen}
+                onClose={handleCalificacionModalClose}
+                event={selectedEventForCalificacion}
+                fechaHabilitada={fechaHabilitada}
             />
         </>
     );

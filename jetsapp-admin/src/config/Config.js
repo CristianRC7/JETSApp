@@ -12,7 +12,12 @@ export const API_CONFIG = {
       CREATE_USER: '/CreateUser.php',
       UPDATE_USER: '/UpdateUser.php',
       DELETE_USER: '/DeleteUser.php',
-      TOGGLE_ADMIN: '/ToggleAdmin.php'
+      TOGGLE_ADMIN: '/ToggleAdmin.php',
+      // HABILITACIÓN CALIFICACIONES
+      GET_CALIFICACION: '/GetCalificacionHabilitada.php',
+      CREATE_CALIFICACION: '/CreateCalificacionHabilitada.php',
+      UPDATE_CALIFICACION: '/UpdateCalificacionHabilitada.php',
+      DELETE_CALIFICACION: '/DeleteCalificacionHabilitada.php'
   }
 };
 
