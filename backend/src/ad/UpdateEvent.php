@@ -12,14 +12,21 @@ try {
     }
 
     $id = $data['id'];
-    $fecha = $data['fecha'];
+    
+    $fechaParts = explode('/', $data['fecha']);
+    if (count($fechaParts) === 3) {
+        $fecha = $fechaParts[2] . '-' . $fechaParts[1] . '-' . $fechaParts[0];
+    } else {
+        throw new Exception('Formato de fecha inválido');
+    }
+    
     $hora = $data['hora'];
     $descripcion = $data['descripcion'];
     $lugar = $data['lugar'];
     $expositor = $data['expositor'];
 
     $query = "UPDATE eventos 
-              SET fecha = ?, hora = ?, descripcion = ?, lugar = ?, expositor = ? 
+              SET fecha = STR_TO_DATE(?, '%Y-%m-%d'), hora = ?, descripcion = ?, lugar = ?, expositor = ? 
               WHERE id = ?";
               
     $stmt = mysqli_prepare($connection, $query);

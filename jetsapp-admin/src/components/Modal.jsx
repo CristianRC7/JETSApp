@@ -13,8 +13,11 @@ export default function Modal({ isOpen, onClose, onSubmit, event }) {
 
     useEffect(() => {
         if (event) {
+            const [day, month, year] = event.fecha.split('/');
+            const formattedDate = `${year}-${month}-${day}`;
+            
             setFormData({
-                fecha: event.fecha,
+                fecha: formattedDate,
                 hora: event.hora,
                 lugar: event.lugar,
                 expositor: event.expositor,
@@ -35,7 +38,13 @@ export default function Modal({ isOpen, onClose, onSubmit, event }) {
         e.preventDefault();
         setLoading(true);
         try {
-            await onSubmit(formData);
+            const [year, month, day] = formData.fecha.split('-');
+            const formattedDate = `${day}/${month}/${year}`;
+            
+            await onSubmit({
+                ...formData,
+                fecha: formattedDate
+            });
             onClose();
         } catch (error) {
             console.error('Error:', error);
