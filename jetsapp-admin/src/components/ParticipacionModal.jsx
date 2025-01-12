@@ -8,6 +8,7 @@ export default function ParticipacionModal({ isOpen, onClose, user }) {
     const [participaciones, setParticipaciones] = useState([]);
     const [gestiones, setGestiones] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [editingParticipacion, setEditingParticipacion] = useState(null);
     const [formData, setFormData] = useState({
         id_gestion: '',
         nro_certificado: ''
@@ -43,36 +44,56 @@ export default function ParticipacionModal({ isOpen, onClose, user }) {
         if (isOpen) {
             fetchParticipaciones();
             fetchGestiones();
+            setEditingParticipacion(null);
+            setFormData({ id_gestion: '', nro_certificado: '' });
         }
     }, [isOpen]);
+
+    const handleEdit = (participacion) => {
+        setEditingParticipacion(participacion);
+        setFormData({
+            id_gestion: participacion.id_gestion.toString(),
+            nro_certificado: participacion.nro_certificado
+        });
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.CREATE_PARTICIPACION), {
+            const endpoint = editingParticipacion 
+                ? `${getApiUrl(API_CONFIG.ENDPOINTS.UPDATE_PARTICIPACION)}`
+                : `${getApiUrl(API_CONFIG.ENDPOINTS.CREATE_PARTICIPACION)}`;
+
+            const bodyData = editingParticipacion
+                ? { ...formData, id: editingParticipacion.id_participacion }
+                : { ...formData, id_usuario: user.id };
+
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    ...formData,
-                    id_usuario: user.id
-                }),
+                body: JSON.stringify(bodyData),
             });
             const data = await response.json();
             
             if (data.success) {
-                Swal.fire('Éxito', 'Participación agregada correctamente', 'success');
+                Swal.fire('Éxito', 
+                    editingParticipacion 
+                        ? 'Participación actualizada correctamente'
+                        : 'Participación agregada correctamente', 
+                    'success'
+                );
                 fetchParticipaciones();
                 setFormData({ id_gestion: '', nro_certificado: '' });
+                setEditingParticipacion(null);
             } else {
                 throw new Error(data.message);
             }
         } catch (error) {
-            Swal.fire('Error', error.message || 'Error al agregar la participación', 'error');
+            Swal.fire('Error', error.message || 'Error al procesar la participación', 'error');
         }
     };
-
     const handleDelete = async (participacionId) => {
         const result = await Swal.fire({
             title: '¿Estás seguro?',
@@ -119,7 +140,9 @@ export default function ParticipacionModal({ isOpen, onClose, user }) {
                     </h3>
                     
                     <form onSubmit={handleSubmit} className="mb-6 p-4 bg-gray-50 rounded-lg">
-                        <h4 className="font-medium mb-4">Agregar Nueva Participación</h4>
+                        <h4 className="font-medium mb-4">
+                            {editingParticipacion ? 'Editar' : 'Agregar Nueva'} Participación
+                        </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -130,6 +153,7 @@ export default function ParticipacionModal({ isOpen, onClose, user }) {
                                     onChange={(e) => setFormData({...formData, id_gestion: e.target.value})}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     required
+                                    disabled={editingParticipacion}
                                 >
                                     <option value="">Seleccione una gestión</option>
                                     {gestiones.map((gestion) => (
@@ -152,12 +176,24 @@ export default function ParticipacionModal({ isOpen, onClose, user }) {
                                 />
                             </div>
                         </div>
-                        <div className="mt-4 flex justify-end">
+                        <div className="mt-4 flex justify-end gap-2">
+                            {editingParticipacion && (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setEditingParticipacion(null);
+                                        setFormData({ id_gestion: '', nro_certificado: '' });
+                                    }}
+                                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                                >
+                                    Cancelar Edición
+                                </button>
+                            )}
                             <button
                                 type="submit"
                                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
-                                Agregar Participación
+                                {editingParticipacion ? 'Actualizar' : 'Agregar'} Participación
                             </button>
                         </div>
                     </form>
@@ -194,12 +230,20 @@ export default function ParticipacionModal({ isOpen, onClose, user }) {
                                                 {participacion.nro_certificado}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                <button
-                                                    onClick={() => handleDelete(participacion.id_participacion)}
-                                                    className="text-red-600 hover:text-red-900"
-                                                >
-                                                    <Trash2 className="h-5 w-5" />
-                                                </button>
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        onClick={() => handleEdit(participacion)}
+                                                        className="text-blue-600 hover:text-blue-900"
+                                                    >
+                                                        <Pencil className="h-5 w-5" />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(participacion.id_participacion)}
+                                                        className="text-red-600 hover:text-red-900"
+                                                    >
+                                                        <Trash2 className="h-5 w-5" />
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))
